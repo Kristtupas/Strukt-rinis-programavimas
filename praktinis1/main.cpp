@@ -50,7 +50,7 @@ int main() {
             else if (valiutosTipas == 3)
                 result = amount * 85.2614; // INR
 
-            cout << fixed << setprecision(2) << "Nusipirkote: " << amount << " už " << result << " EUR" << endl;
+            cout << fixed << setprecision(2) << "Nusipirkote: " << amount << " uz " << result << " EUR" << endl;
             break;
 
         case 3: // Parduoti valiutą

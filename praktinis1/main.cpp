@@ -3,18 +3,22 @@
 using namespace std;
 
 int main() {
+    string pavadinimas= " ";
     cout << "Pasirinkite:"<<endl;
     cout << "1. EUR -> Kita valiuta"<<endl;
     cout << "2. Pirkti valiuta"<<endl;
     cout << "3. Parduoti valiuta"<<endl;
+    cout << "4. iseiti"<<endl;
 
-    int parinktis;
+
     cout << "Iveskite pasirinkimo numeri: ";
+    int parinktis=1;
     cin >> parinktis;
 
     int valiutosTipas;
     double amount, result;
 
+    while(parinktis !=4)
     switch (parinktis) {
         case 1: // EUR -> Kita valiuta
             cout << "Pasirinkite valiuta:"<<endl;
@@ -25,14 +29,17 @@ int main() {
             cout << "Iveskite suma (EUR): ";
             cin >> amount;
 
-            if (valiutosTipas == 1)
+            if (valiutosTipas == 1) {
                 result = amount * 0.8593; // GBP
-            else if (valiutosTipas == 2)
+                pavadinimas="GBP";
+            } else if (valiutosTipas == 2) {
                 result = amount * 1.0713; // USD
-            else if (valiutosTipas == 3)
+                pavadinimas="USD";
+            } else if (valiutosTipas == 3) {
                 result = amount * 88.8260; // INR
-
-            cout << fixed << setprecision(2) << amount << " EUR -> " << result << endl;
+                pavadinimas="INR";
+            }
+            cout << fixed << setprecision(2) << amount << " EUR -> " << result << pavadinimas << endl;
             break;
         case 2: // Pirkti valiutą
             cout << "Pasirinkite valiuta:"<<endl;
@@ -43,14 +50,17 @@ int main() {
             cout << "Iveskite suma: ";
             cin >> amount;
 
-            if (valiutosTipas == 1)
-                result = amount * 0.8450; // GBP
-            else if (valiutosTipas == 2)
-                result = amount * 1.0547; // USD
-            else if (valiutosTipas == 3)
-                result = amount * 85.2614; // INR
-
-            cout << fixed << setprecision(2) << "Nusipirkote: " << amount << " uz " << result << " EUR" << endl;
+            if (valiutosTipas == 1) {
+                result = amount / 0.8450; // GBP
+                pavadinimas = " GBP ";
+            } else if (valiutosTipas == 2){
+            result = amount / 1.0547; // USD
+                pavadinimas = " USD ";
+        }else if (valiutosTipas == 3) {
+            result = amount / 85.2614; // INR
+            pavadinimas = " INR ";
+        }
+            cout << fixed << setprecision(2) << "Nusipirkote: " << amount << pavadinimas << " uz " << result << " EUR" << endl;
             break;
 
         case 3: // Parduoti valiutą
@@ -62,18 +72,25 @@ int main() {
             cout << "Iveskite suma: ";
             cin >> amount;
 
-            if (valiutosTipas == 1)
+            if (valiutosTipas == 1) {
                 result = amount / 0.9060; // GBP
-            else if (valiutosTipas == 2)
+                pavadinimas="GBP";
+            }else if (valiutosTipas == 2) {
                 result = amount / 1.1309; // USD
-            else if (valiutosTipas == 3)
+                pavadinimas="USD";
+            }else if (valiutosTipas == 3) {
                 result = amount / 92.8334; // INR
+                pavadinimas="INR";
+            }
 
-            cout << fixed << setprecision(2) << "Pardavete: " << amount << " uz " << result << " EUR" << endl;
+            cout << fixed << setprecision(2) << "Pardavete: " << amount<< pavadinimas << " uz " << result << " EUR" << endl;
             break;
 
         default:
             cout << "Neteisingas pasirinkimas." << endl;
+            break;
+        case 4:
+            cout<< "jus isejote is programos"<< endl;
             break;
     }
 

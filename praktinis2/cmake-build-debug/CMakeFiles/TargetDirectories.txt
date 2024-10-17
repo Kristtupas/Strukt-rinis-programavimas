@@ -1,0 +1,3 @@
+C:/Users/s057713/Documents/Strukturinis-programavimas/praktinis2/cmake-build-debug/CMakeFiles/praktinis2.dir
+C:/Users/s057713/Documents/Strukturinis-programavimas/praktinis2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/s057713/Documents/Strukturinis-programavimas/praktinis2/cmake-build-debug/CMakeFiles/rebuild_cache.dir

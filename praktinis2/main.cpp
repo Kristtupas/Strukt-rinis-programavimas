@@ -1,81 +1,115 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+
 using namespace std;
 
-int main() 
-{
-    int pasirinkimas;
-
-do {
-cout << "\nPasirinkite veiksma:\n";
-cout << "1. Patikrinti ar raide yra balse\n";    
-cout << "2. Iseiti\n";
-cout << "Pasirinkite: ";
-cin >> pasirinkimas;
-
-    if (pasirinkimas == 1) {
-       char raide;
-       cout << "Iveskite raide: ";
-       cin >> raide;
-
-    // Patikriname ar raide yra balse
-    bool yraBalse = false;
-        
-     if (raide == 'a') {
-        yraBalse = true;
-    } else if ( raide == 'e') {
-        yraBalse = true;
-    } else if ( raide == 'i') {
-        yraBalse = true;
-    } else if ( raide == 'o') {
-        yraBalse = true;
-    } else if ( raide == 'u') {
-        yraBalse = true;
-    }
-
-        if (yraBalse) {
-            cout << "true" << endl;
-        } else {
-            cout << "false" << endl;
+bool yraBalse(char raide) {
+    char balses[] = {'a', 'e', 'i', 'o', 'u',};
+    for (char b : balses) {
+        if (raide == b) {
+            return true;
         }
-    
     }
-    
-} while (pasirinkimas != 2); 
-    
-  cout << "Programa baigta.\n";
-  return 0;
+    return false;
 }
 
-
-
-
-
-
-#include <iostream>  
-
-using namespace std;
-
-int didziausiasBendrasDaliklis(int a, int b) {
-    while (b != 0) {  
-        int laikinai = b;  
-        b = a % b;  
-        a = laikinai;  
+int gbd(int sk1, int sk2) {
+    while (sk2 != 0) {
+        int laikinis = sk2;
+        sk2 = sk1 % sk2;
+        sk1 = laikinis;
     }
-    return a; 
+    return sk1;
+}
+
+void zaidimas() {
+    int atsitiktinisSk;
+    int vartotojoPats;
+    srand(static_cast<unsigned int>(time(0)));
+    atsitiktinisSk = rand() % 100 + 1;
+
+    cout << "Atspek skaiciu nuo 1 iki 100:" << endl;
+    do {
+        cout << "Iveskite skaiciu: ";
+        cin >> vartotojoPats;
+
+        if (vartotojoPats > atsitiktinisSk) {
+            cout << "Per didelis! Bandykite dar karta." << endl;
+        } else if (vartotojoPats < atsitiktinisSk) {
+            cout << "Per mazas! Bandykite dar karta." << endl;
+        } else {
+            cout << "Teisingai! Atspejote skaiciu!" << endl;
+        }
+    } while (vartotojoPats != atsitiktinisSk);
+}
+
+void fizzbuzz(int n) {
+    for (int i = 1; i <= n; i++) {
+        if (i % 3 == 0 && i % 5 == 0) {
+            cout << "FizzBuzz" << endl;
+        } else if (i % 3 == 0) {
+            cout << "Fizz" << endl;
+        } else if (i % 5 == 0) {
+            cout << "Buzz" << endl;
+        } else {
+            cout << i << endl;
+        }
+    }
 }
 
 int main() {
-    int sk1, sk2;  
+    int pasirinkimas;
+    do {
+        cout << "Pasirinkite funkcija:" << endl;
+        cout << "1. Patikrinti ar raide yra balse" << endl;
+        cout << "2. Rasti didziausia bendra dalikli" << endl;
+        cout << "3. Mini zaidimas" << endl;
+        cout << "4. FizzBuzz" << endl;
+        cout << "0. Iseiti" << endl;
+        cout << "Pasirinkimas: ";
+        cin >> pasirinkimas;
 
-    cout << "Įveskite pirmą skaičių: ";
-    cin >> sk1; 
-    cout << "Įveskite antrą skaičių: ";
-    cin >> sk2; 
+        switch (pasirinkimas) {
+            case 1: {
+                char raide;
+                cout << "Iveskite raide: ";
+                cin >> raide;
+                cout << (yraBalse(raide) ? "True." : "False.");
+                break;
+            }
+            case 2: {
+                int sk1, sk2;
+                cout << "Iveskite pirma skaiciu: ";
+                cin >> sk1;
+                cout << "Iveskite antra skaiciu: ";
+                cin >> sk2;
+                cout << "Didziausias bendras daliklis: " << gbd(sk1, sk2) << endl;
+                break;
+            }
+            case 3: {
+                zaidimas();
+                break;
+            }
+            case 4: {
+                int n;
+                cout << "Iveskite teigiama sveikaji skaiciu n: ";
+                cin >> n;
+                fizzbuzz(n);
+                break;
+            }
+            case 0:
+                cout << "Programa baigta." << endl;
+                break;
+            default:
+                cout << "Neteisingas pasirinkimas. Bandykite dar karta." << endl;
+        }
+    } while (pasirinkimas != 0);
 
-    cout << "Didžiausias bendras daliklis: " 
-         << didziausiasBendrasDaliklis(sk1, sk2) << endl;
-
-    return 0;  
+    return 0;
 }
+
+
+
+
+

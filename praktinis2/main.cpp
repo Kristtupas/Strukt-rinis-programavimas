@@ -1,7 +1,3 @@
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-
 using namespace std;
 
 bool yraBalse(char raide) {
@@ -25,33 +21,35 @@ int gbd(int sk1, int sk2) {
 
 void zaidimas() {
     int atsitiktinisSk;
-    int vartotojoPats;
+    int vartotojoSk;
     srand(static_cast<unsigned int>(time(0)));
     atsitiktinisSk = rand() % 100 + 1;
 
     cout << "Atspek skaiciu nuo 1 iki 100:" << endl;
     do {
         cout << "Iveskite skaiciu: ";
-        cin >> vartotojoPats;
+        cin >> vartotojoSk;
 
-        if (vartotojoPats > atsitiktinisSk) {
+        if (vartotojoSk > atsitiktinisSk) {
             cout << "Per didelis! Bandykite dar karta." << endl;
-        } else if (vartotojoPats < atsitiktinisSk) {
+        } else if (vartotojoSk < atsitiktinisSk) {
             cout << "Per mazas! Bandykite dar karta." << endl;
         } else {
-            cout << "Teisingai! Atspejote skaiciu!" << endl;
+            cout << "Teisingai" << endl;
         }
-    } while (vartotojoPats != atsitiktinisSk);
+    } while (vartotojoSk != atsitiktinisSk);
 }
 
 void fizzbuzz(int n) {
     for (int i = 1; i <= n; i++) {
-        if (i % 3 == 0 && i % 5 == 0) {
+        if (i % 3 == 0 && i % 5 == 0 && i % 7 == 0) {
             cout << "FizzBuzz" << endl;
         } else if (i % 3 == 0) {
             cout << "Fizz" << endl;
         } else if (i % 5 == 0) {
             cout << "Buzz" << endl;
+        } else if (i % 7 == 0) {
+            cout << "Boom" << endl;
         } else {
             cout << i << endl;
         }
@@ -108,6 +106,10 @@ int main() {
 
     return 0;
 }
+
+
+
+
 
 
 

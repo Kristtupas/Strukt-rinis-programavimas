@@ -1,162 +1,114 @@
 #include <iostream>
-#include <string>
+#include <cstring>
+using namespace std;
 
-class VigenereCipher {
-private:
-    std::string alphabet = "AĄBCČDEĘĖFGHIĮYJKLMNOPRSŠTUŲŪVZŽ";
+const char ABECELE[26] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
-public:
-    // Šifravimas abėcėlės koduote
-    std::string encryptAlphabet(const std::string& text, const std::string& key) {
-        std::string encrypted = "";
-        int textLen = text.length();
-        int keyLen = key.length();
+void uzsifruotiAbecelę(const char tekstas[], const char raktas[], char rezultatas[]) {
+    int tekstoIlgis = strlen(tekstas);
+    int raktasIlgis = strlen(raktas);
 
-        for (int i = 0; i < textLen; ++i) {
-            char textChar = std::toupper(text[i]);
-            char keyChar = std::toupper(key[i % keyLen]);
-
-            auto textPos = alphabet.find(textChar);
-            auto keyPos = alphabet.find(keyChar);
-
-            if (textPos != std::string::npos) {
-                int newPos = (textPos + keyPos) % alphabet.length();
-                encrypted += alphabet[newPos];
-            } else {
-                encrypted += textChar;
-            }
+    for (int i = 0; i < tekstoIlgis; i++) {
+        if (isalpha(tekstas[i])) {
+            char t = toupper(tekstas[i]);
+            char r = toupper(raktas[i % raktasIlgis]);
+            int tIndex = t - 'A';
+            int rIndex = r - 'A';
+            rezultatas[i] = ABECELE[(tIndex + rIndex) % 26];
+        } else {
+            rezultatas[i] = tekstas[i];
         }
-
-        return encrypted;
     }
+    rezultatas[tekstoIlgis] = '\0';
+}
 
-    // Dešifravimas abėcėlės koduote
-    std::string decryptAlphabet(const std::string& encrypted, const std::string& key) {
-        std::string decrypted = "";
-        int encryptedLen = encrypted.length();
-        int keyLen = key.length();
+void desifruotiAbecele(const char tekstas[], const char raktas[], char rezultatas[]) {
+    int tekstoIlgis = strlen(tekstas);
+    int raktasIlgis = strlen(raktas);
 
-        for (int i = 0; i < encryptedLen; ++i) {
-            char encryptedChar = std::toupper(encrypted[i]);
-            char keyChar = std::toupper(key[i % keyLen]);
-
-            auto encryptedPos = alphabet.find(encryptedChar);
-            auto keyPos = alphabet.find(keyChar);
-
-            if (encryptedPos != std::string::npos) {
-                int originalPos = (encryptedPos - keyPos + alphabet.length()) % alphabet.length();
-                decrypted += alphabet[originalPos];
-            } else {
-                decrypted += encryptedChar;
-            }
+    for (int i = 0; i < tekstoIlgis; i++) {
+        if (isalpha(tekstas[i])) {
+            char t = toupper(tekstas[i]);
+            char r = toupper(raktas[i % raktasIlgis]);
+            int tIndex = t - 'A';
+            int rIndex = r - 'A';
+            rezultatas[i] = ABECELE[(tIndex - rIndex + 26) % 26];
+        } else {
+            rezultatas[i] = tekstas[i];
         }
-
-        return decrypted;
     }
+    rezultatas[tekstoIlgis] = '\0';
+}
 
-    // Šifravimas ASCII koduote
-    std::string encryptASCII(const std::string& text, const std::string& key) {
-        std::string encrypted = "";
-        int textLen = text.length();
-        int keyLen = key.length();
-
-        for (int i = 0; i < textLen; ++i) {
-            // Šifruojame tik spausdinamus ASCII simbolius (32-126)
-            if (text[i] >= 32 && text[i] <= 126) {
-                char encryptedChar = ((text[i] - 32 + key[i % keyLen] - 32) % 95) + 32;
-                encrypted += encryptedChar;
-            } else {
-                encrypted += text[i];
-            }
+void uzsifruotiASCII(const char tekstas[], const char raktas[], char rezultatas[]) {
+    int tekstoIlgis = strlen(tekstas);
+    int raktasIlgis = strlen(raktas);
+    for (int i = 0; i < tekstoIlgis; i++) {
+        if (tekstas[i] >= 33 && tekstas[i] <= 126) {
+            int tIndex = tekstas[i] - 33;
+            int rIndex = raktas[i % raktasIlgis] - 33;
+            rezultatas[i] = (tIndex + rIndex) % 94 + 33;
+        } else {
+            rezultatas[i] = tekstas[i];
         }
-
-        return encrypted;
     }
+    rezultatas[tekstoIlgis] = '\0';
+}
 
-    // Dešifravimas ASCII koduote
-    std::string decryptASCII(const std::string& encrypted, const std::string& key) {
-        std::string decrypted = "";
-        int encryptedLen = encrypted.length();
-        int keyLen = key.length();
-
-        for (int i = 0; i < encryptedLen; ++i) {
-            // Dešifruojame tik spausdinamus ASCII simbolius (32-126)
-            if (encrypted[i] >= 32 && encrypted[i] <= 126) {
-                char decryptedChar = ((encrypted[i] - 32 - (key[i % keyLen] - 32) + 95) % 95) + 32;
-                decrypted += decryptedChar;
-            } else {
-                decrypted += encrypted[i];
-            }
+void desifruotiASCII(const char tekstas[], const char raktas[], char rezultatas[]) {
+    int tekstoIlgis = strlen(tekstas);
+    int raktasIlgis = strlen(raktas);
+    for (int i = 0; i < tekstoIlgis; i++) {
+        if (tekstas[i] >= 33 && tekstas[i] <= 126) {
+            int tIndex = tekstas[i] - 33;
+            int rIndex = raktas[i % raktasIlgis] - 33;
+            rezultatas[i] = (tIndex - rIndex + 94) % 94 + 33;
+        } else {
+            rezultatas[i] = tekstas[i];
         }
-
-        return decrypted;
     }
-};
-
-// Pagrindinis meniu
-void showMenu() {
-    std::cout << "\n--- Vigenere Šifravimas ---\n";
-    std::cout << "1. Šifruoti tekstą (Abėcėlė)\n";
-    std::cout << "2. Dešifruoti tekstą (Abėcėlė)\n";
-    std::cout << "3. Šifruoti tekstą (ASCII)\n";
-    std::cout << "4. Dešifruoti tekstą (ASCII)\n";
-    std::cout << "5. Baigti programą\n";
-    std::cout << "Pasirinkite veiksmą: ";
+    rezultatas[tekstoIlgis] = '\0';
 }
 
 int main() {
-    VigenereCipher cipher;
-    int choice;
-    std::string text, key;
+    int pasirinkimas;
+    char tekstas[100], raktas[100], rezultatas[100];
 
     while (true) {
-        showMenu();
-        std::cin >> choice;
-        std::cin.ignore(); // Išvalo Enter klavišą
+        cout << "Pasirinkite operacija, kuria norite atlikti su tekstu:" << endl;
+        cout << "1. Sifruoti naudojant abecele" << endl;
+        cout << "2. Desifruoti naudojant abecele" << endl;
+        cout << "3. Sifruoti naudojant ASCII koduote" << endl;
+        cout << "4. Desifruoti naudojant ASCII koduote" << endl;
+        cout << "5. Iseiti" << endl;
+        cout << "Jusu pasirinkimas: ";
+        cin >> pasirinkimas;
+        cin.ignore();
 
-        switch (choice) {
-            case 1: 
-                std::cout << "Įveskite tekstą šifravimui (Abėcėlė): ";
-                std::getline(std::cin, text);
-                std::cout << "Įveskite raktą: ";
-                std::getline(std::cin, key);
-                std::cout << "Užšifruotas tekstas: " 
-                          << cipher.encryptAlphabet(text, key) << std::endl;
-                break;
+        if (pasirinkimas == 5) {
+            cout << "Programa baigta" << endl;
+            break;
+        }
 
-            case 2:
-                std::cout << "Įveskite tekstą dešifravimui (Abėcėlė): ";
-                std::getline(std::cin, text);
-                std::cout << "Įveskite raktą: ";
-                std::getline(std::cin, key);
-                std::cout << "Dešifruotas tekstas: " 
-                          << cipher.decryptAlphabet(text, key) << std::endl;
-                break;
+        cout << "Irasykite teksta: ";
+        cin.getline(tekstas, 100);
+        cout << "Irasykite rakta: ";
+        cin.getline(raktas, 100);
 
-            case 3:
-                std::cout << "Įveskite tekstą šifravimui (ASCII): ";
-                std::getline(std::cin, text);
-                std::cout << "Įveskite raktą: ";
-                std::getline(std::cin, key);
-                std::cout << "Užšifruotas tekstas: " 
-                          << cipher.encryptASCII(text, key) << std::endl;
-                break;
-
-            case 4:
-                std::cout << "Įveskite tekstą dešifravimui (ASCII): ";
-                std::getline(std::cin, text);
-                std::cout << "Įveskite raktą: ";
-                std::getline(std::cin, key);
-                std::cout << "Dešifruotas tekstas: " 
-                          << cipher.decryptASCII(text, key) << std::endl;
-                break;
-
-            case 5:
-                std::cout << "Programa baigta.\n";
-                return 0;
-
-            default:
-                std::cout << "Neteisingas pasirinkimas!\n";
+        if (pasirinkimas == 1) {
+            uzsifruotiAbecelę(tekstas, raktas, rezultatas);
+            cout << "Uzsifruotas tekstas: " << rezultatas << endl;
+        } else if (pasirinkimas == 2) {
+            desifruotiAbecele(tekstas, raktas, rezultatas);
+            cout << "Desifruotas tekstas: " << rezultatas << endl;
+        } else if (pasirinkimas == 3) {
+            uzsifruotiASCII(tekstas, raktas, rezultatas);
+            cout << "Uzsifruotas tekstas (ASCII): " << rezultatas << endl;
+        } else if (pasirinkimas == 4) {
+            desifruotiASCII(tekstas, raktas, rezultatas);
+            cout << "Desifruotas tekstas (ASCII): " << rezultatas << endl;
+        } else {
+            cout << "Neteisingas pasirinkimas, bandykite dar karta" << endl;
         }
     }
 

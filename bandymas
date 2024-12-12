@@ -2,7 +2,7 @@
 #include <string>
 #include <iomanip>
 #include <vector>
-
+#include <fstream>
 using namespace std;
 
 struct menuItemType {
@@ -10,12 +10,12 @@ struct menuItemType {
     double menuPrice;
 };
 
-void getData (menuItemType menuList[], int& menuSize)
-{
+// Funkcija, kuri užpildo meniu sąrašą
+void getData(menuItemType menuList[], int& menuSize) {
     menuList[0] = {"Kiausiniene", 1.45};
     menuList[1] = {"Kiaulienos sonine su keptu kiausiniu", 2.45};
     menuList[2] = {"Keksiukas su vysnia", 0.99};
-    menuList[3] ={"Prancuziskas skrebutis", 1.99};
+    menuList[3] = {"Prancuziskas skrebutis", 1.99};
     menuList[4] = {"Vaisiu salotos", 2.49};
     menuList[5] = {"Pusryciu dribsniai", 0.69};
     menuList[6] = {"Kava", 0.50};
@@ -25,17 +25,84 @@ void getData (menuItemType menuList[], int& menuSize)
 }
 
 void showMenu(const menuItemType menuList[], int menuSize) {
-    cout << "Sveiki atvyke i restorana „ Senamiestis“ " << endl;
+    cout << "Sveiki atvyke i restorana 'Senamiestis'" << endl;
     for (int i = 0; i < menuSize; i++) {
-        cout << (i + 1) << ". " << menuList[i].menuItem << " - " << fixed << setprecision(2) << menuList[i].menuPrice << "Eur" << endl;
+        cout << (i + 1) << ". " << menuList[i].menuItem << " - " << fixed << setprecision(2) << menuList[i].menuPrice << " Eur" << endl;
+    }
+}
+
+void printCheck(const vector<pair<int, int>>& order, const menuItemType menuList[], int menuSize) {
+    double total = 0.0;
+    double tax = 0.21;
+    vector<pair<string, double>> orderedItems;
+
+    for (auto& item : order) {
+        for (int i = 0; i < item.second; i++) {
+            orderedItems.push_back({menuList[item.first - 1].menuItem, menuList[item.first - 1].menuPrice});
+            total += menuList[item.first - 1].menuPrice;
+        }
+    }
+
+    double taxAmount = total * tax;
+    double finalAmount = total + taxAmount;
+
+    cout << "Saskaita:" << endl;
+    for (auto& item : orderedItems) {
+        cout << item.first << " - " << fixed << setprecision(2) << item.second << " Eur" << endl;
+    }
+
+    cout << "Mokesciai - " << fixed << setprecision(2) << taxAmount << " Eur" << endl;
+    cout << "Galutine suma - " << fixed << setprecision(2) << finalAmount << " Eur" << endl;
+
+    ofstream outFile("check.txt");
+    if (outFile.is_open()) {
+        outFile << "Saskaita:" << endl;
+        for (auto& item : orderedItems) {
+            outFile << item.first << " - " << fixed << setprecision(2) << item.second << " Eur" << endl;
+        }
+        outFile << "Mokesčiai - " << fixed << setprecision(2) << taxAmount << " Eur" << endl;
+        outFile << "Galutinė suma - " << fixed << setprecision(2) << finalAmount << " Eur" << endl;
+        outFile.close();
+    } else {
+        cout << "Nepavyko atidaryti failo." << endl;
     }
 }
 
 int main() {
     menuItemType menuList[8];
     int menuSize = 0;
+
     getData(menuList, menuSize);
+
     showMenu(menuList, menuSize);
+
+    vector<pair<int, int>> order;
+    int choice, quantity;
+
+    cout << "Pasirinkite patiekalus. Paspauskite 0, kai norite baigti." << endl;
+    while (true) {
+        cout << "Iveskite pasirinkto patiekalo numeri (1-8): ";
+        cin >> choice;
+
+        if (choice == 0) {
+            break;
+        }
+
+        if (choice >= 1 && choice <= 8) {
+            cout << "Kiek porciju norite (1-10)? ";
+            cin >> quantity;
+
+            if (quantity >= 1 && quantity <= 10) {
+                order.push_back(make_pair(choice, quantity));
+            } else {
+                cout << "Netinkamas porciju skaičius, bandykite dar kartą." << endl;
+            }
+        } else {
+            cout << "Netinkamas pasirinkimas, bandykite dar karta." << endl;
+        }
+    }
+
+    printCheck(order, menuList, menuSize);
 
     return 0;
 }

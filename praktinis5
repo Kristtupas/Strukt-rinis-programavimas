@@ -1,0 +1,109 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+struct Kontaktas {
+    int id;
+    string vardas;
+    string pavarde;
+    string telefonas;
+};
+
+void pridetiKontakta(vector<Kontaktas>& kontaktai) {
+    Kontaktas naujasKontaktas;
+    cout << "Iveskite kontakta:" << endl;
+    cout << "Vardas: ";
+    cin >> naujasKontaktas.vardas;
+    cout << "Pavarde: ";
+    cin >> naujasKontaktas.pavarde;
+    cout << "Telefonas: ";
+    cin >> naujasKontaktas.telefonas;
+    naujasKontaktas.id = kontaktai.size() + 1;
+    kontaktai.push_back(naujasKontaktas);
+}
+
+void spausdintiKontaktus(const vector<Kontaktas>& kontaktai) {
+    cout << "Visi kontaktai:" << endl;
+    for (const auto& kontaktas : kontaktai) {
+        cout << "ID: " << kontaktas.id << endl;
+        cout << "Vardas: " << kontaktas.vardas << endl;
+        cout << "Pavarde: " << kontaktas.pavarde << endl;
+        cout << "Telefonas: " << kontaktas.telefonas << endl;
+    }
+}
+
+void pasalintiKontakta(vector<Kontaktas>& kontaktai, int id) {
+    auto it = find_if(kontaktai.begin(), kontaktai.end(), [id](const Kontaktas& kontaktas) {
+        return kontaktas.id == id;
+    });
+
+    if (it != kontaktai.end()) {
+        kontaktai.erase(it);
+        cout << "Kontaktas su ID " << id << " buvo pasalintas." << endl;
+    } else {
+        cout << "Kontaktas su tokiu ID nerastas." << endl;
+    }
+}
+
+void atnaujintiKontakta(vector<Kontaktas>& kontaktai, int id) {
+    auto it = find_if(kontaktai.begin(), kontaktai.end(), [id](const Kontaktas& kontaktas) {
+        return kontaktas.id == id;
+    });
+
+    if (it != kontaktai.end()) {
+        cout << "Iveskite naujus kontaktinius duomenis:" << endl;
+        cout << "Naujas vardas: ";
+        cin >> it->vardas;
+        cout << "Nauja pavarde: ";
+        cin >> it->pavarde;
+        cout << "Naujas telefonas: ";
+        cin >> it->telefonas;
+        cout << "Kontaktas buvo atnaujintas." << endl;
+    } else {
+        cout << "Kontaktas su tokiu ID nerastas." << endl;
+    }
+}
+
+int main() {
+    vector<Kontaktas> kontaktai;
+    int pasirinkimas, id;
+
+    do {
+        cout << "Pasirinkite veiksma:";
+        cout << "1. Prideti kontakta" << endl;
+        cout << "2. Spausdinti visus kontaktus" << endl;
+        cout << "3. Pasalinti kontakta" << endl;
+        cout << "4. Atnaujinti kontakta" << endl;
+        cout << "0. Iseiti" << endl;
+        cout << "Jusu pasirinkimas: ";
+        cin >> pasirinkimas;
+
+        switch (pasirinkimas) {
+            case 1:
+                pridetiKontakta(kontaktai);
+                break;
+            case 2:
+                spausdintiKontaktus(kontaktai);
+                break;
+            case 3:
+                cout << "Iveskite kontakta, kuri norite pasalinti (ID): ";
+                cin >> id;
+                pasalintiKontakta(kontaktai, id);
+                break;
+            case 4:
+                cout << "Iveskite kontakta, kuri norite atnaujinti (ID): ";
+                cin >> id;
+                atnaujintiKontakta(kontaktai, id);
+                break;
+            case 0:
+                cout << "Iseinama is programos." << endl;
+                break;
+            default:
+                cout << "Neteisingas pasirinkimas. Bandykite vel." << endl;
+        }
+    } while (pasirinkimas != 0);
+
+    return 0;
+}
